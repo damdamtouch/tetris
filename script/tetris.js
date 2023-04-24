@@ -6,11 +6,6 @@ let startY = 0;
 let playerPosition = [0, 0];
 let target = 10;
 let theGrid = [];
-let currentTetromino2 = [
-  [2, 0, 0],
-  [2, 2, 2],
-  [0, 0, 0],
-];
 
 let currentTetromino = [
   [2, 2, 0],
@@ -18,12 +13,6 @@ let currentTetromino = [
   [0, 2, 0],
 ];
 
-let lineTetrominos = [
-  [0, 0, 0, 0],
-  [1, 1, 1, 1],
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-];
 let cellsToDraw = [];
 
 //startButton.addEventListener("click", startTheGame);
@@ -42,26 +31,25 @@ function startTheGame() {
       allTheCells.push(div);
     }
   }
-
-  /*console.log(theGrid);
-  console.log(theGrid[0][2]);
-  console.log("salut ", playerPosition);
-  console.log(playerPosition[0] * 10 + playerPosition[1]);
-  console.log(allTheCells); */
   getTetrominoCell(currentTetromino);
 }
 
 function getTetrominoCell(currentTetromino) {
-  console.log(currentTetromino);
+  if (cellsToDraw.length === 0) {
+    startX = 0;
+    startY = 0;
+  }
   cellsToDraw = [];
   for (let i = 0; i < currentTetromino.length; i++) {
     for (let j = 0; j < currentTetromino[i].length; j++) {
       if (currentTetromino[i][j]) {
-        let myInlineRowPosition = startX + i * 10 + j;
+        let myInlineRowPosition = startX + i * 10 + j + startY;
         cellsToDraw.push(myInlineRowPosition);
       }
     }
   }
+
+  //console.log("we need tu fusionne ", previousPosition, cellsToDraw);
   drawingTetromino(cellsToDraw);
 }
 
@@ -85,10 +73,13 @@ function movingTetromino(direction) {
   console.log("i have to move", direction);
   console.log(cellsToDraw);
   if (direction === "left") {
+    startY -= 1;
     cellsToDraw.forEach((cell, index) => (cellsToDraw[index] = cell - 1));
   } else if (direction === "right") {
+    startY += 1;
     cellsToDraw.forEach((cell, index) => (cellsToDraw[index] = cell + 1));
   } else if (direction === "down") {
+    startX += 10;
     cellsToDraw.forEach((cell, index) => (cellsToDraw[index] = cell + 10));
   } else if (direction === "up") {
     rotateTetromino(currentTetromino);
@@ -96,11 +87,16 @@ function movingTetromino(direction) {
   drawingTetromino(cellsToDraw);
 }
 
-function rotateTetromino(a) {
-  console.log("je dois nettoyer ", cellsToDraw);
-  cleanTetromino(cellsToDraw);
-  currentTetromino = a.map((_, colIndex) => a.map((row) => row[colIndex]));
-  console.log(currentTetromino);
+function rotateTetromino(currentTetromino) {
+  for (let y = 0; y < currentTetromino.length; ++y) {
+    for (let x = 0; x < y; ++x) {
+      [currentTetromino[x][y], currentTetromino[y][x]] = [
+        currentTetromino[y][x],
+        currentTetromino[x][y],
+      ];
+    }
+  }
+  currentTetromino.reverse();
   getTetrominoCell(currentTetromino);
 }
 
