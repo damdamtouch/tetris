@@ -1,0 +1,36 @@
+* {
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.grid {
+  width: 200px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cell {
+  width: 20px;
+  aspect-ratio: 1;
+  border: 1px solid black;
+}
+
+.target {
+  background-color: chartreuse;
+}
+.player {
+  background-color: dodgerblue;
+}
+
+.right-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.play-button {
+  background-color: #4caf50;
+  font-size: 16px;
+  padding: 15px 30px;
+  cursor: pointer;
+}
