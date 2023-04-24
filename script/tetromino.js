@@ -1,10 +1,21 @@
 // Defining my tetromino
+class tetromino {
+  constructor(name, matrix, color) {
+    this.name = name;
+    this.matrix = matrix;
+    this.color = color;
+  }
+}
 
-let tetro0 = [
-  [1, 1, 0],
-  [1, 1, 0],
-  [0, 0, 0],
-];
+const tetro0 = new tetromino(
+  tetro0,
+  [
+    [1, 1, 0],
+    [1, 1, 0],
+    [0, 0, 0],
+  ],
+  "yellow"
+);
 
 let tetrominoJ = [
   [2, 0, 0],
@@ -42,3 +53,5 @@ let tetrominoI = [
   [0, 0, 0, 0],
   [0, 0, 0, 0],
 ];
+
+export * from "tetromino";

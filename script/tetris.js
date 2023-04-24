@@ -1,3 +1,4 @@
+//import * as tetromino from tetromino
 const startButton = document.getElementById("start");
 const gridElement = document.querySelector(".grid");
 const allTheCells = [];
@@ -13,6 +14,7 @@ let currentTetromino = [
   [0, 2, 0],
 ];
 
+//console.log(tetromino.tetro0)
 let cellsToDraw = [];
 
 //startButton.addEventListener("click", startTheGame);
@@ -34,11 +36,8 @@ function startTheGame() {
   getTetrominoCell(currentTetromino);
 }
 
+function callingTetromino() {}
 function getTetrominoCell(currentTetromino) {
-  if (cellsToDraw.length === 0) {
-    startX = 0;
-    startY = 0;
-  }
   cellsToDraw = [];
   for (let i = 0; i < currentTetromino.length; i++) {
     for (let j = 0; j < currentTetromino[i].length; j++) {
@@ -48,8 +47,7 @@ function getTetrominoCell(currentTetromino) {
       }
     }
   }
-
-  //console.log("we need tu fusionne ", previousPosition, cellsToDraw);
+  console.log("end of getTetrominoCell ", cellsToDraw);
   drawingTetromino(cellsToDraw);
 }
 
@@ -58,32 +56,70 @@ function drawingTetromino(cellsToDraw) {
     console.log("drawing ", cell);
     allTheCells[cell].classList.add("player");
   }
-  console.log("finished drawing");
+}
+
+function checkIfCollide(cellsToDraw, direction) {
+  console.log("check colide with directoin", direction);
+
+  return cellsToDraw.some((cell, index) => {
+    if (direction === "down") {
+      return allTheCells[cell + 10].classList.contains("player");
+    } else if (direction === "left") {
+      let isBorderLeft = false;
+      cellsToDraw.forEach((cell, index) => {
+        if (cellsToDraw[index] % 10 === 0) {
+          console.log("found a 0");
+          isBorderLeft = true;
+        }
+      });
+      if (isBorderLeft) {
+        return true;
+      } else {
+        return allTheCells[cell - 1].classList.contains("player");
+      }
+    } else if (direction === "right") {
+      let isBorderRight = false;
+      cellsToDraw.forEach((cell, index) => {
+        if ((cellsToDraw[index] + 1) % 10 === 0) {
+          console.log("found a 0");
+          isBorderRight = true;
+        }
+      });
+      if (isBorderRight) {
+        return true;
+      } else {
+        return allTheCells[cell - 1].classList.contains("player");
+      }
+    }
+  });
 }
 
 function cleanTetromino(cellsToClean) {
   for (let cell of cellsToClean) {
-    console.log("cleaning ", cell);
+    //console.log("cleaning ", cell);
     allTheCells[cell].classList.remove("player");
   }
 }
 
-function movingTetromino(direction) {
-  console.log("can i play with ", cellsToDraw);
-  console.log("i have to move", direction);
-  console.log(cellsToDraw);
+function move(direction) {
+  const currentCells = cellsToDraw;
+  cleanTetromino(cellsToDraw);
   if (direction === "left") {
-    startY -= 1;
-    cellsToDraw.forEach((cell, index) => (cellsToDraw[index] = cell - 1));
+    if (!checkIfCollide(cellsToDraw, direction)) {
+      startY -= 1;
+      cellsToDraw.forEach((cell, index) => (cellsToDraw[index] = cell - 1));
+    }
   } else if (direction === "right") {
-    startY += 1;
-    cellsToDraw.forEach((cell, index) => (cellsToDraw[index] = cell + 1));
+    if (!checkIfCollide(cellsToDraw, direction)) {
+      startY += 1;
+      cellsToDraw.forEach((cell, index) => (cellsToDraw[index] = cell + 1));
+    }
   } else if (direction === "down") {
-    startX += 10;
-    cellsToDraw.forEach((cell, index) => (cellsToDraw[index] = cell + 10));
+    goingDown();
   } else if (direction === "up") {
     rotateTetromino(currentTetromino);
   }
+
   drawingTetromino(cellsToDraw);
 }
 
@@ -100,11 +136,33 @@ function rotateTetromino(currentTetromino) {
   getTetrominoCell(currentTetromino);
 }
 
-function move(direction) {
-  cleanTetromino(cellsToDraw);
-  console.log((direction, " received"));
-  movingTetromino(direction);
+function goingDown() {
+  if (checkIfCollide(cellsToDraw, "down")) {
+    return;
+  }
+  startX += 10;
+  cellsToDraw.forEach((cell, index) => (cellsToDraw[index] = cell + 10));
 }
+
+document.addEventListener("keydown", (event) => {
+  console.log(event.key);
+  switch (event.key) {
+    case "ArrowRight":
+      move("right");
+      break;
+    case "ArrowLeft":
+      move("left");
+      break;
+    case "ArrowDown":
+      move("down");
+      break;
+    case "ArrowUp":
+      move("up");
+      break;
+  }
+});
+
+startTheGame();
 
 /* Legacy move function
 function move(direction) {
@@ -141,22 +199,14 @@ function move(direction) {
   }
 }
 */
-document.addEventListener("keydown", (event) => {
-  console.log(event.key);
-  switch (event.key) {
-    case "ArrowRight":
-      move("right");
-      break;
-    case "ArrowLeft":
-      move("left");
-      break;
-    case "ArrowDown":
-      move("down");
-      break;
-    case "ArrowUp":
-      move("up");
-      break;
-  }
-});
 
-startTheGame();
+let tetrominoS = [
+  [0, 2, 2],
+  [2, 2, 0],
+  [0, 0, 0],
+];
+
+allTheCells[60].classList.add("player");
+allTheCells[61].classList.add("player");
+allTheCells[70].classList.add("player");
+allTheCells[71].classList.add("player");
