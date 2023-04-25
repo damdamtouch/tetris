@@ -66,6 +66,10 @@ function checkIfCollide(cellsToDraw, direction) {
   console.log("check colide with direction", direction);
   return cellsToDraw.some((cell, index) => {
     if (direction === "down") {
+      console.log("this is the cell", cell);
+      if (cell + 10 >= 200) {
+        return true;
+      }
       return allTheCells[cell + 10].classList.contains("player");
     } else if (direction === "left") {
       if (cell % 10 === 0) {
@@ -189,3 +193,17 @@ allTheCells[60].classList.add("player");
 allTheCells[61].classList.add("player");
 allTheCells[70].classList.add("player");
 allTheCells[71].classList.add("player");
+
+/*
+var intervalId = window.setInterval(function () {
+  // call your function here
+  move("down");
+}, 500);
+*/
+
+/*
+allTheCells[195].classList.add("player");
+allTheCells[194].classList.add("player");
+allTheCells[196].classList.add("player");
+allTheCells[197].classList.add("player");
+*/
