@@ -12,10 +12,10 @@ let colorToApply = "";
 let cantGoDown = Boolean;
 let currentTetromino = [];
 let listOfColoredCell = [];
+let completedRow = 0;
 
 // STARTING THE GAME
 function creatingTheGrid() {
-  callingTetromino();
   for (let row = 0; row < 20; row++) {
     theGrid.push([]);
     for (let col = 0; col < 10; col++) {
@@ -33,22 +33,45 @@ function creatingTheGrid() {
 //Function to call tetromino
 
 function callingTetromino() {
-  //const index = Math.floor(Math.random() * myListOfTetromino.length);
-  const index = 4;
+  const index = Math.floor(Math.random() * myListOfTetromino.length);
+  //const index = 4;
   currentTetromino = myListOfTetromino[index].matrix;
   colorToApply = myListOfTetromino[index].color;
 }
+
+//Function to get the new cell of a tetromino (when created and/or rotated)
+function getTetrominoCell(currentTetromino) {
+  cellsToDraw = [];
+  for (let i = 0; i < currentTetromino.length; i++) {
+    for (let j = 0; j < currentTetromino[i].length; j++) {
+      if (currentTetromino[i][j]) {
+        let myInlineRowPosition = startX + i * 10 + j + startY;
+        cellsToDraw.push(myInlineRowPosition);
+      }
+    }
+  }
+  console.log("end of getTetrominoCell ", cellsToDraw);
+  return cellsToDraw;
+}
+
+// STARTING THE TESTS
 
 //function to delete a completed line
 function completedLine() {
   let numberOfCellColoredPerRow = 0;
   listOfColoredCell = [];
   allTheCells.forEach((cell, index) => {
+    if (index % 10 === 0) {
+      console.log("first cell of the row is colored at index", index);
+      numberOfCellColoredPerRow = 0;
+    }
     if (cell.classList.contains("colored")) {
-      if (index % 10 === 0) {
-        console.log("first cell of the row is colored");
-        numberOfCellColoredPerRow = 0;
-      }
+      console.log(
+        "i'm incrementing numberofCELL with cell",
+        index,
+        "current number is",
+        numberOfCellColoredPerRow
+      );
       numberOfCellColoredPerRow++;
       listOfColoredCell.push(index);
       if (numberOfCellColoredPerRow === 10) {
@@ -61,7 +84,6 @@ function completedLine() {
         for (let i = index - 9; i <= index; i++) {
           allTheCells[i].classList.remove("colored");
           allTheCells[i].setAttribute("color", "");
-          console.log(allTheCells[i]);
         }
         //shift down all the previous lines
         listOfColoredCell
@@ -80,32 +102,11 @@ function completedLine() {
               );
             }
           });
+        completedLine();
+        completedRow++;
       }
     }
   });
-}
-//Function to get the new cell of a tetromino (when created and/or rotated)
-function getTetrominoCell(currentTetromino) {
-  cellsToDraw = [];
-  for (let i = 0; i < currentTetromino.length; i++) {
-    for (let j = 0; j < currentTetromino[i].length; j++) {
-      if (currentTetromino[i][j]) {
-        let myInlineRowPosition = startX + i * 10 + j + startY;
-        cellsToDraw.push(myInlineRowPosition);
-      }
-    }
-  }
-  console.log("end of getTetrominoCell ", cellsToDraw);
-  return cellsToDraw;
-}
-
-//Actually applying the class to the cell to color them
-function drawingTetromino(cellsToDraw) {
-  for (let index of cellsToDraw) {
-    console.log("drawing ", index, "with color", colorToApply);
-    allTheCells[index].classList.add("colored");
-    allTheCells[index].setAttribute("color", colorToApply);
-  }
 }
 
 //Chechink the collisions
@@ -115,6 +116,7 @@ function checkIfCollide(cellsToDraw, direction) {
     if (direction === "down") {
       //console.log("this is the cell", cell);
       if (cell + 10 >= 200) {
+        cantGoDown = true;
         return true;
       }
       return allTheCells[cell + 10].classList.contains("colored");
@@ -153,7 +155,18 @@ function checkIfCollide(cellsToDraw, direction) {
   });
 }
 
+// DRAWING AND DELETING
+//Actually applying the class to the cell to color them
+function drawingTetromino(cellsToDraw) {
+  for (let index of cellsToDraw) {
+    console.log("drawing ", index, "with color", colorToApply);
+    allTheCells[index].classList.add("colored");
+    allTheCells[index].setAttribute("color", colorToApply);
+  }
+}
+
 function cleanTetromino(cellsToClean) {
+  console.log("using cleanTetromino");
   for (let cell of cellsToClean) {
     allTheCells[cell].classList.remove("colored");
     allTheCells[cell].setAttribute("color", "");
@@ -227,15 +240,26 @@ document.addEventListener("keydown", (event) => {
     case "ArrowUp":
       move("up");
       break;
+    case "Enter":
+      cleaningVariables();
+      completedLine();
+      startingTheGame();
+      break;
   }
 });
 
 creatingTheGrid();
 
 function startingTheGame() {
+  callingTetromino();
   drawingTetromino(getTetrominoCell(currentTetromino));
 }
 
+function cleaningVariables() {
+  startX = 4;
+  startY = -1;
+  listOfColoredCell = [];
+}
 /*
 var intervalId = window.setInterval(function () {
   // call your function here
@@ -245,12 +269,10 @@ var intervalId = window.setInterval(function () {
 
 startButton.addEventListener("click", startingTheGame);
 
-
 allTheCells[195].classList.add("colored");
 allTheCells[194].classList.add("colored");
 allTheCells[196].classList.add("colored");
 allTheCells[197].classList.add("colored");
-
 
 allTheCells[60].classList.add("colored");
 allTheCells[61].classList.add("colored");
@@ -262,13 +284,33 @@ allTheCells[88].setAttribute("color", "violet");
 allTheCells[89].classList.add("colored");
 allTheCells[89].setAttribute("color", "violet");
 
+allTheCells[150].classList.add("colored");
+allTheCells[150].setAttribute("color", "violet");
+allTheCells[151].classList.add("colored");
+allTheCells[151].setAttribute("color", "violet");
+allTheCells[152].classList.add("colored");
+allTheCells[152].setAttribute("color", "violet");
+allTheCells[153].classList.add("colored");
+allTheCells[153].setAttribute("color", "violet");
+allTheCells[154].classList.add("colored");
+allTheCells[154].setAttribute("color", "violet");
+allTheCells[155].classList.add("colored");
+allTheCells[155].setAttribute("color", "violet");
+allTheCells[156].classList.add("colored");
+allTheCells[156].setAttribute("color", "violet");
+allTheCells[157].classList.add("colored");
+allTheCells[157].setAttribute("color", "violet");
+allTheCells[158].classList.add("colored");
+allTheCells[158].setAttribute("color", "violet");
+allTheCells[159].classList.add("colored");
+allTheCells[159].setAttribute("color", "violet");
+
 allTheCells[140].classList.add("colored");
 allTheCells[140].setAttribute("color", "azure");
 allTheCells[141].classList.add("colored");
 allTheCells[141].setAttribute("color", "azure");
 allTheCells[142].classList.add("colored");
 allTheCells[142].setAttribute("color", "azure");
-
 allTheCells[143].classList.add("colored");
 allTheCells[143].setAttribute("color", "azure");
 allTheCells[144].classList.add("colored");
