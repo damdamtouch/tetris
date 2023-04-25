@@ -18,13 +18,32 @@ html {
   border: 1px solid black;
 }
 
-.target {
-  background-color: chartreuse;
-}
-.player {
+.colored {
   background-color: dodgerblue;
 }
 
+[color="orange"] {
+  background-color: orange;
+}
+
+[color="green"] {
+  background-color: #00ff00;
+}
+[color="red"] {
+  background-color: #ff0000;
+}
+[color="orange"] {
+  background-color: #ff7f00;
+}
+[color="azure"] {
+  background-color: #00ffff;
+}
+[color="yellow"] {
+  background-color: #ffff00;
+}
+[color="violet"] {
+  background-color: #800080;
+}
 .right-column {
   display: flex;
   flex-direction: column;
