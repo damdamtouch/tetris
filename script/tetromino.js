@@ -1,4 +1,5 @@
 // Defining my tetromino
+
 class tetromino {
   constructor(name, matrix, color) {
     this.name = name;
@@ -6,9 +7,10 @@ class tetromino {
     this.color = color;
   }
 }
+export const myListOfTetromino = [];
 
-const tetro0 = new tetromino(
-  tetro0,
+export const tetro0 = new tetromino(
+  "tetro0",
   [
     [1, 1, 0],
     [1, 1, 0],
@@ -17,41 +19,74 @@ const tetro0 = new tetromino(
   "yellow"
 );
 
-let tetrominoJ = [
-  [2, 0, 0],
-  [2, 2, 2],
-  [0, 0, 0],
-];
+export const tetrominoJ = new tetromino(
+  "tetroJ",
+  [
+    [2, 0, 0],
+    [2, 2, 2],
+    [0, 0, 0],
+  ],
+  "blue"
+);
 
-let tetrominoL = [
-  [0, 0, 2],
-  [2, 2, 2],
-  [0, 0, 0],
-];
+export const tetrominoL = new tetromino(
+  "tetroL",
+  [
+    [0, 0, 2],
+    [2, 2, 2],
+    [0, 0, 0],
+  ],
+  "orange"
+);
 
-let tetrominoS = [
-  [0, 2, 2],
-  [2, 2, 0],
-  [0, 0, 0],
-];
+export const tetrominoS = new tetromino(
+  "tetroS",
+  [
+    [0, 2, 2],
+    [2, 2, 0],
+    [0, 0, 0],
+  ],
+  "green"
+);
 
-let tetrominoZ = [
-  [2, 2, 0],
-  [0, 2, 2],
-  [0, 0, 0],
-];
+export const tetrominoZ = new tetromino(
+  "tetroZ",
+  [
+    [2, 2, 0],
+    [0, 2, 2],
+    [0, 0, 0],
+  ],
+  "red"
+);
 
-let tetrominoT = [
-  [0, 2, 0],
-  [2, 2, 2],
-  [0, 0, 0],
-];
+export const tetrominoT = new tetromino(
+  "tetroT",
+  [
+    [0, 2, 0],
+    [2, 2, 2],
+    [0, 0, 0],
+  ],
+  "violet"
+);
 
-let tetrominoI = [
-  [0, 0, 0, 0],
-  [1, 1, 1, 1],
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-];
+export const tetrominoI = new tetromino(
+  "tetroI",
+  [
+    [1, 1, 1, 1],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+  ],
+  "azure"
+);
 
-export * from "tetromino";
+myListOfTetromino.push(
+  tetrominoI,
+  tetrominoJ,
+  tetrominoL,
+  tetrominoT,
+  tetrominoZ,
+  tetrominoS,
+  tetro0
+);
+//console.log(myListOfTetromino);
