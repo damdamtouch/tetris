@@ -275,16 +275,18 @@ function move(direction) {
   drawingTetromino(cellsToDraw);
 }
 
+//Honesty force me to admit this is not my code... tried to use .map()
 function rotateTetromino(tetrominoToRotate) {
-  for (let y = 0; y < tetrominoToRotate.length; ++y) {
-    for (let x = 0; x < y; ++x) {
-      [tetrominoToRotate[x][y], tetrominoToRotate[y][x]] = [
-        tetrominoToRotate[y][x],
-        tetrominoToRotate[x][y],
-      ];
+  let n = tetrominoToRotate.length;
+  for (let i = 0; i < n / 2; i++) {
+    for (let j = i; j < n - i - 1; j++) {
+      let tmp = tetrominoToRotate[i][j];
+      tetrominoToRotate[i][j] = tetrominoToRotate[n - j - 1][i];
+      tetrominoToRotate[n - j - 1][i] = tetrominoToRotate[n - i - 1][n - j - 1];
+      tetrominoToRotate[n - i - 1][n - j - 1] = tetrominoToRotate[j][n - i - 1];
+      tetrominoToRotate[j][n - i - 1] = tmp;
     }
   }
-  tetrominoToRotate.reverse();
   return tetrominoToRotate;
 }
 
