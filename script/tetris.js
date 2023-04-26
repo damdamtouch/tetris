@@ -17,6 +17,7 @@ let intervalId = 0;
 let tetrominoPicked = [0, 0, 0, 0, 0, 0, 0];
 let tetrominoSZinaRow = 0;
 let cantGoDown = Boolean;
+let intervalToLock = 0;
 
 //Save data for the rotation test
 //let savedTetrominoToTest = [];
@@ -47,6 +48,7 @@ function creatingTheGrid() {
 
 function callingTetromino() {
   //const index = Math.floor(Math.random() * myListOfTetromino.length);
+  console.log("hello from calling tetromino");
   const index = 1;
   tetrominoPicked[index] += 1;
 
@@ -102,13 +104,16 @@ function checkIfCollide(cellsToDraw, direction) {
 
   //Testing collisions down/left/right
   if (direction === "down" || direction === "left" || direction === "right") {
-    return cellsToDraw.some((cell, index) => {
+    const touched = cellsToDraw.some((cell, index) => {
       if (direction === "down") {
         //console.log("this is the cell", cell);
         if (cell + 10 >= 200) {
           cantGoDown = true;
           return true;
         }
+        // if (allTheCells[cell + 10].classList.contains("colored")) {
+        //   startingTheGame();
+        // }
         return allTheCells[cell + 10].classList.contains("colored");
       } else if (direction === "left") {
         if (cell % 10 === 0) {
@@ -127,6 +132,8 @@ function checkIfCollide(cellsToDraw, direction) {
         }
       }
     });
+    console.log(touched, " touche");
+    return touched;
     //Starting to test if the rotation is possible
   } else if (direction === "up") {
     let isColliding = false;
@@ -184,6 +191,7 @@ function checkIfCollide(cellsToDraw, direction) {
 function completedLine() {
   let numberOfCellColoredPerRow = 0;
   listOfColoredCell = [];
+  console.log("hey");
   allTheCells.forEach((cell, index) => {
     if (index % 10 === 0) {
       //Reseting the compteur on first cell of each line
@@ -259,7 +267,8 @@ function move(direction) {
     if (!checkIfCollide(cellsToDraw, "down")) {
       goingDown();
     } else {
-      cantGoDown = true;
+      drawingTetromino(cellsToDraw);
+      startingTheGame();
     }
   } else if (direction === "up") {
     if (!checkIfCollide(cellsToDraw, direction)) {
@@ -292,6 +301,7 @@ function rotateTetromino(tetrominoToRotate) {
 
 function goingDown() {
   startX += 10;
+  // setTimeout(() => startingTheGame, 3000);
   cellsToDraw.forEach((cell, index) => (cellsToDraw[index] = cell + 10));
 }
 
@@ -311,9 +321,7 @@ document.addEventListener("keydown", (event) => {
       move("up");
       break;
     case "Enter":
-      cleaningVariables();
-      completedLine();
-      startingTheGame();
+      startingNewPiece();
       break;
     case " ":
       for (let i = 0; i < 20; i++) {
@@ -329,6 +337,9 @@ document.addEventListener("keydown", (event) => {
 creatingTheGrid();
 
 function startingTheGame() {
+  // intervalToLock = setTimeout(startingNewPiece, 3000);
+  //intervalToLock = setTimeout(() => console.log("salut"), 3000);
+  startingNewPiece();
   callingTetromino();
   drawingTetromino(getTetrominoCell(currentTetromino));
   /*
@@ -354,12 +365,19 @@ function cleaningVariables() {
   startY = -1;
   listOfColoredCell = [];
 }
-/*
-var intervalId = window.setInterval(function () {
+
+function startingNewPiece() {
+  //intervalToLock = setInterval(startingNewPiece, 1000);
+  console.log("create new piece");
+  cleaningVariables();
+  completedLine();
+  // startingTheGame();
+}
+
+let downID = window.setInterval(function () {
   // call your function here
   move("down");
-}, 500);
-*/
+}, 1000);
 
 //allTheCells[9].classList.add("colored");
 //allTheCells[19].classList.add("colored");
