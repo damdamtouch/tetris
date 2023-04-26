@@ -19,7 +19,7 @@ let tetrominoSZinaRow = 0;
 let cantGoDown = Boolean;
 
 //Save data for the rotation test
-let savedTetrominoToTest = [];
+//let savedTetrominoToTest = [];
 let savedCurrentCells = [];
 
 // Var for deleting completed row
@@ -47,7 +47,7 @@ function creatingTheGrid() {
 
 function callingTetromino() {
   //const index = Math.floor(Math.random() * myListOfTetromino.length);
-  const index = 5;
+  const index = 1;
   tetrominoPicked[index] += 1;
 
   //because you can't have the tetromino S and Z more than for times in a row
@@ -134,7 +134,7 @@ function checkIfCollide(cellsToDraw, direction) {
     console.log("we saved the cellsToDraw", cellsToDraw);
 
     console.log("we gonna rotate to test");
-    let rotatedTetromino = currentTetromino;
+    let rotatedTetromino = structuredClone(currentTetromino);
     rotateTetromino(rotatedTetromino);
 
     let theNewPosition = getTetrominoCellToTest(rotatedTetromino);
@@ -147,7 +147,7 @@ function checkIfCollide(cellsToDraw, direction) {
         isColliding = true;
         return;
       }
-      cellsToDraw.some((currentCell) => {
+      savedCurrentCells.some((currentCell) => {
         if (currentCell.toString().slice(-1) < 5) {
           console.log("we're on the left of the screen");
           sideOfTheScreen = "left";
@@ -173,7 +173,8 @@ function checkIfCollide(cellsToDraw, direction) {
       }
     });
     if (!isColliding) {
-      getTetrominoCell(rotatedTetromino);
+      rotateTetromino(currentTetromino);
+      getTetrominoCell(currentTetromino);
       return isColliding;
     }
   }

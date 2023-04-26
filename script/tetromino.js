@@ -22,9 +22,9 @@ export const tetro0 = new tetromino(
 export const tetrominoJ = new tetromino(
   "tetroJ",
   [
-    [0, 0, 0],
-    [2, 0, 0],
-    [2, 2, 2],
+    [2, 0, 0, 0],
+    [2, 2, 2, 0],
+    [0, 0, 0, 0],
   ],
   "blue"
 );
@@ -32,9 +32,9 @@ export const tetrominoJ = new tetromino(
 export const tetrominoL = new tetromino(
   "tetroL",
   [
-    [0, 0, 0],
-    [0, 0, 2],
-    [2, 2, 2],
+    [0, 0, 2, 0],
+    [2, 2, 2, 0],
+    [0, 0, 0, 0],
   ],
   "orange"
 );
@@ -42,9 +42,9 @@ export const tetrominoL = new tetromino(
 export const tetrominoS = new tetromino(
   "tetroS",
   [
-    [0, 0, 0],
-    [0, 2, 2],
-    [2, 2, 0],
+    [0, 2, 2, 0],
+    [2, 2, 0, 0],
+    [0, 0, 0, 0],
   ],
   "green"
 );
@@ -52,9 +52,9 @@ export const tetrominoS = new tetromino(
 export const tetrominoZ = new tetromino(
   "tetroZ",
   [
-    [0, 0, 0],
-    [2, 2, 0],
-    [0, 2, 2],
+    [2, 2, 0, 0],
+    [0, 2, 2, 0],
+    [0, 0, 0, 0],
   ],
   "red"
 );
