@@ -79,6 +79,7 @@ function getTetrominoCell(currentTetromino) {
   return cellsToDraw;
 }
 
+//Re-Creating the function that create the list of new cell to make test (the above edit "cellToDraw" general variable and make actual change)
 function getTetrominoCellToTest(tetrominoToTest) {
   let cellsToTert = [];
   for (let i = 0; i < tetrominoToTest.length; i++) {
@@ -98,6 +99,8 @@ function getTetrominoCellToTest(tetrominoToTest) {
 function checkIfCollide(cellsToDraw, direction) {
   //console.log("check colide with direction", direction);
   console.log("salut les cells to draw", cellsToDraw, direction);
+
+  //Testing collisions down/left/right
   if (direction === "down" || direction === "left" || direction === "right") {
     return cellsToDraw.some((cell, index) => {
       if (direction === "down") {
@@ -124,6 +127,7 @@ function checkIfCollide(cellsToDraw, direction) {
         }
       }
     });
+    //Starting to test if the rotation is possible
   } else if (direction === "up") {
     let isColliding = false;
     savedCurrentCells = cellsToDraw;
@@ -157,7 +161,7 @@ function checkIfCollide(cellsToDraw, direction) {
         isColliding = true;
         console.log("there is a colored where you want to rotate", cell);
       }
-
+      //Here we're testing if the rotated list of cell are going on the other side of the screen
       if (sideOfTheScreen === "left" && (cell % 10).toString().endsWith("9")) {
         console.log("probleme with border on left");
         console.log("with cell ", cell);
@@ -181,25 +185,13 @@ function completedLine() {
   listOfColoredCell = [];
   allTheCells.forEach((cell, index) => {
     if (index % 10 === 0) {
-      //console.log("first cell of the row is colored at index", index);
+      //Reseting the compteur on first cell of each line
       numberOfCellColoredPerRow = 0;
     }
     if (cell.classList.contains("colored")) {
-      /*console.log(
-        "i'm incrementing numberofCELL with cell",
-        index,
-        "current number is",
-        numberOfCellColoredPerRow
-      );*/
       numberOfCellColoredPerRow++;
       listOfColoredCell.push(index);
       if (numberOfCellColoredPerRow === 10) {
-        //console.log("there is a complete row");
-        //console.log("starting from index", index - 9);
-        /*console.log(
-          "here is the list of all previosu colored cell" + listOfColoredCell
-        );*/
-        //deleting the full line
         for (let i = index - 9; i <= index; i++) {
           allTheCells[i].classList.remove("colored");
           allTheCells[i].setAttribute("color", "");
@@ -221,6 +213,7 @@ function completedLine() {
               );
             }
           });
+        //Recalling the function in the case of several completed row
         completedLine();
         completedRow++;
         document.getElementById("lines").innerText = completedRow;
@@ -229,11 +222,6 @@ function completedLine() {
     }
   });
 }
-
-//Chechink the collisions
-
-/*} 
-}*/
 
 // DRAWING AND DELETING
 //Actually applying the class to the cell to color them
@@ -384,6 +372,7 @@ allTheCells[88].classList.add("colored");
 allTheCells[88].setAttribute("color", "violet");
 allTheCells[89].classList.add("colored");
 allTheCells[89].setAttribute("color", "violet");
+
 /*
 allTheCells[195].classList.add("colored");
 allTheCells[194].classList.add("colored");
