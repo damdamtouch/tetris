@@ -85,3 +85,4 @@ Adding : "Poly"-mino which is sqaure of 3x3 or more
 Difficulties :
 
 Wallkick => how to manage rotation
+https://tetris.fandom.com/wiki/Wall_kick

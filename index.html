@@ -7,12 +7,23 @@
     <link rel="stylesheet" href="./style/style.css" />
     <script type="module" src="./script/tetris.js"></script>
     <script type="module" src="./script/tetromino.js"></script>
+
     <title>Document</title>
   </head>
   <body>
     <main>
       <div class="grid"></div>
-      <button id="start" class="play-button">start the game</button>
+
+      <div class="side-panel">
+        <h2>Tetris</h2>
+        <a>Score : <span id="score">0</span></a>
+        <br />
+        <a>Lines : </a><span id="lines">0</span>
+        <br />
+        <button id="start" class="button">Play</button>
+        <br />
+        <button id="pause" class="button">Pause</button>
+      </div>
     </main>
   </body>
 </html>

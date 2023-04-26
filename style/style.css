@@ -5,9 +5,16 @@
 html {
   background-color: black;
 }
+main {
+  display: flex;
+  margin-left: 3rem;
+  margin-top: 3rem;
+}
 .grid {
   background-color: white;
-  width: 200px;
+  max-width: 200px;
+  min-width: 200px;
+  height: 400px;
   display: flex;
   flex-wrap: wrap;
 }
@@ -50,9 +57,16 @@ html {
   justify-content: space-between;
 }
 
-.play-button {
+.button {
   background-color: #4caf50;
+  height: 40px;
+  width: 100px;
   font-size: 16px;
-  padding: 15px 30px;
+  margin-top: 20px;
   cursor: pointer;
+}
+
+.side-panel {
+  color: white;
+  padding-left: 30px;
 }

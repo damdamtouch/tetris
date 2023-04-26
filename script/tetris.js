@@ -1,18 +1,31 @@
 import { myListOfTetromino } from "./tetromino.js";
 
+// HTML Elements
 const startButton = document.getElementById("start");
+const pauseButton = document.getElementById("pause");
 const gridElement = document.querySelector(".grid");
 const allTheCells = [];
+
+// Default var
 let startX = 4;
 let startY = -1;
 let theGrid = [];
-let savedCurrentCells = [];
 let cellsToDraw = [];
 let colorToApply = "";
-let cantGoDown = Boolean;
 let currentTetromino = [];
+let intervalId = 0;
+let tetrominoPicked = [0, 0, 0, 0, 0, 0, 0];
+let tetrominoSZinaRow = 0;
+let cantGoDown = Boolean;
+
+//Save data for the rotation test
+let savedTetrominoToTest = [];
+let savedCurrentCells = [];
+
+// Var for deleting completed row
 let listOfColoredCell = [];
 let completedRow = 0;
+let score = 0;
 
 // STARTING THE GAME
 function creatingTheGrid() {
@@ -33,10 +46,22 @@ function creatingTheGrid() {
 //Function to call tetromino
 
 function callingTetromino() {
-  const index = Math.floor(Math.random() * myListOfTetromino.length);
-  //const index = 4;
+  //const index = Math.floor(Math.random() * myListOfTetromino.length);
+  const index = 5;
+  tetrominoPicked[index] += 1;
+
+  //because you can't have the tetromino S and Z more than for times in a row
+  if (index === 3) {
+    tetrominoSZinaRow += 1;
+  } else if (index === 4) {
+    tetrominoSZinaRow += 1;
+  } else {
+    tetrominoSZinaRow = 0;
+  }
+
   currentTetromino = myListOfTetromino[index].matrix;
   colorToApply = myListOfTetromino[index].color;
+  //console.log(tetrominoPicked);
 }
 
 //Function to get the new cell of a tetromino (when created and/or rotated)
@@ -54,7 +79,101 @@ function getTetrominoCell(currentTetromino) {
   return cellsToDraw;
 }
 
+function getTetrominoCellToTest(tetrominoToTest) {
+  let cellsToTert = [];
+  for (let i = 0; i < tetrominoToTest.length; i++) {
+    for (let j = 0; j < tetrominoToTest[i].length; j++) {
+      if (tetrominoToTest[i][j]) {
+        let myInlineRowPosition = startX + i * 10 + j + startY;
+        cellsToTert.push(myInlineRowPosition);
+      }
+    }
+  }
+  console.log("end of getTetrominoCellToTest ", cellsToTert);
+  return cellsToTert;
+}
+
 // STARTING THE TESTS
+
+function checkIfCollide(cellsToDraw, direction) {
+  //console.log("check colide with direction", direction);
+  console.log("salut les cells to draw", cellsToDraw, direction);
+  if (direction === "down" || direction === "left" || direction === "right") {
+    return cellsToDraw.some((cell, index) => {
+      if (direction === "down") {
+        //console.log("this is the cell", cell);
+        if (cell + 10 >= 200) {
+          cantGoDown = true;
+          return true;
+        }
+        return allTheCells[cell + 10].classList.contains("colored");
+      } else if (direction === "left") {
+        if (cell % 10 === 0) {
+          console.log("found a border left");
+          return true;
+        } else {
+          //console.log("found something on leftt");
+          return allTheCells[cell - 1].classList.contains("colored");
+        }
+      } else if (direction === "right") {
+        if ((cell + 1) % 10 === 0) {
+          console.log("found a border right");
+          return true;
+        } else {
+          return allTheCells[cell + 1].classList.contains("colored");
+        }
+      }
+    });
+  } else if (direction === "up") {
+    let isColliding = false;
+    savedCurrentCells = cellsToDraw;
+    console.log("we saved the cellsToDraw", cellsToDraw);
+
+    console.log("we gonna rotate to test");
+    let rotatedTetromino = currentTetromino;
+    rotateTetromino(rotatedTetromino);
+
+    let theNewPosition = getTetrominoCellToTest(rotatedTetromino);
+    console.log("we will now check this position", theNewPosition);
+    let sideOfTheScreen = "";
+    //Start testing
+    theNewPosition.some((cell) => {
+      if (cell > 200) {
+        console.log("can't go too down");
+        isColliding = true;
+        return;
+      }
+      cellsToDraw.some((currentCell) => {
+        if (currentCell.toString().slice(-1) < 5) {
+          console.log("we're on the left of the screen");
+          sideOfTheScreen = "left";
+        } else {
+          console.log("we're on the right of the screen");
+          sideOfTheScreen = "right";
+        }
+      });
+      if (allTheCells[cell].classList.contains("colored")) {
+        console.log("Hello !!!!! FOUND");
+        isColliding = true;
+        console.log("there is a colored where you want to rotate", cell);
+      }
+
+      if (sideOfTheScreen === "left" && (cell % 10).toString().endsWith("9")) {
+        console.log("probleme with border on left");
+        console.log("with cell ", cell);
+        isColliding = true;
+      } else if (sideOfTheScreen === "right" && cell % 10 === 0) {
+        console.log("probleme with border on right");
+        console.log("with cell ", cell);
+        isColliding = true;
+      }
+    });
+    if (!isColliding) {
+      getTetrominoCell(rotatedTetromino);
+      return isColliding;
+    }
+  }
+}
 
 //function to delete a completed line
 function completedLine() {
@@ -62,24 +181,24 @@ function completedLine() {
   listOfColoredCell = [];
   allTheCells.forEach((cell, index) => {
     if (index % 10 === 0) {
-      console.log("first cell of the row is colored at index", index);
+      //console.log("first cell of the row is colored at index", index);
       numberOfCellColoredPerRow = 0;
     }
     if (cell.classList.contains("colored")) {
-      console.log(
+      /*console.log(
         "i'm incrementing numberofCELL with cell",
         index,
         "current number is",
         numberOfCellColoredPerRow
-      );
+      );*/
       numberOfCellColoredPerRow++;
       listOfColoredCell.push(index);
       if (numberOfCellColoredPerRow === 10) {
-        console.log("there is a complete row");
-        console.log("starting from index", index - 9);
-        console.log(
+        //console.log("there is a complete row");
+        //console.log("starting from index", index - 9);
+        /*console.log(
           "here is the list of all previosu colored cell" + listOfColoredCell
-        );
+        );*/
         //deleting the full line
         for (let i = index - 9; i <= index; i++) {
           allTheCells[i].classList.remove("colored");
@@ -104,69 +223,30 @@ function completedLine() {
           });
         completedLine();
         completedRow++;
+        document.getElementById("lines").innerText = completedRow;
+        document.getElementById("score").innerText = completedRow * 200;
       }
     }
   });
 }
 
 //Chechink the collisions
-function checkIfCollide(cellsToDraw, direction) {
-  console.log("check colide with direction", direction);
-  return cellsToDraw.some((cell, index) => {
-    if (direction === "down") {
-      //console.log("this is the cell", cell);
-      if (cell + 10 >= 200) {
-        cantGoDown = true;
-        return true;
-      }
-      return allTheCells[cell + 10].classList.contains("colored");
-    } else if (direction === "left") {
-      if (cell % 10 === 0) {
-        console.log("found a border left");
-        return true;
-      } else {
-        return allTheCells[cell - 1].classList.contains("colored");
-      }
-    } else if (direction === "right") {
-      if ((cell + 1) % 10 === 0) {
-        console.log("found a border right");
-        return true;
-      } else {
-        return allTheCells[cell + 1].classList.contains("colored");
-      }
-    } else if (direction === "up") {
-      let isColliding = false;
-      savedCurrentCells = cellsToDraw;
 
-      rotateTetromino(currentTetromino);
-      const theNewPosition = getTetrominoCell(currentTetromino);
-      console.log("we will now check this position", theNewPosition);
-      theNewPosition.forEach((cell) => {
-        if (allTheCells[cell].classList.contains("colored")) {
-          console.log("Hello !!!!! FOUND");
-          isColliding = true;
-          console.log("there is a colored where you want to rotate", cell);
-        } else if ((cell + 1) % 10 === 0 || cell % 10 === 0) {
-          isColliding = true;
-        }
-      });
-      return isColliding;
-    }
-  });
-}
+/*} 
+}*/
 
 // DRAWING AND DELETING
 //Actually applying the class to the cell to color them
 function drawingTetromino(cellsToDraw) {
   for (let index of cellsToDraw) {
-    console.log("drawing ", index, "with color", colorToApply);
+    //console.log("drawing ", index, "with color", colorToApply);
     allTheCells[index].classList.add("colored");
     allTheCells[index].setAttribute("color", colorToApply);
   }
 }
 
 function cleanTetromino(cellsToClean) {
-  console.log("using cleanTetromino");
+  //console.log("using cleanTetromino");
   for (let cell of cellsToClean) {
     allTheCells[cell].classList.remove("colored");
     allTheCells[cell].setAttribute("color", "");
@@ -175,7 +255,6 @@ function cleanTetromino(cellsToClean) {
 
 function move(direction) {
   cleanTetromino(cellsToDraw);
-  console.log("move launched with ", direction);
   if (direction === "left") {
     if (!checkIfCollide(cellsToDraw, direction)) {
       startY -= 1;
@@ -187,37 +266,37 @@ function move(direction) {
       cellsToDraw.forEach((cell, index) => (cellsToDraw[index] = cell + 1));
     }
   } else if (direction === "down") {
-    console.log("checking the cells to draw ", cellsToDraw);
+    //console.log("checking the cells to draw ", cellsToDraw);
     if (!checkIfCollide(cellsToDraw, "down")) {
       goingDown();
     } else {
       cantGoDown = true;
     }
   } else if (direction === "up") {
-    console.log("move ", cellsToDraw);
-    //console.log("check cell 61", allTheCells[60].classList.contains("colored"));
     if (!checkIfCollide(cellsToDraw, direction)) {
-      getTetrominoCell(rotateTetromino(currentTetromino));
+      //getTetrominoCell(rotateTetromino(currentTetromino));
     } else {
-      console.log("reseting the cells");
-      cellsToDraw = savedCurrentCells;
+      console.log("reseting the cells edited cells ", cellsToDraw);
+      console.log("restoring cells to ", savedCurrentCells);
+
+      //cellsToDraw = savedCurrentCells;
     }
   }
 
   drawingTetromino(cellsToDraw);
 }
 
-function rotateTetromino(currentTetromino) {
-  for (let y = 0; y < currentTetromino.length; ++y) {
+function rotateTetromino(tetrominoToRotate) {
+  for (let y = 0; y < tetrominoToRotate.length; ++y) {
     for (let x = 0; x < y; ++x) {
-      [currentTetromino[x][y], currentTetromino[y][x]] = [
-        currentTetromino[y][x],
-        currentTetromino[x][y],
+      [tetrominoToRotate[x][y], tetrominoToRotate[y][x]] = [
+        tetrominoToRotate[y][x],
+        tetrominoToRotate[x][y],
       ];
     }
   }
-  currentTetromino.reverse();
-  return currentTetromino;
+  tetrominoToRotate.reverse();
+  return tetrominoToRotate;
 }
 
 function goingDown() {
@@ -226,7 +305,7 @@ function goingDown() {
 }
 
 document.addEventListener("keydown", (event) => {
-  console.log(event.key);
+  //console.log(event.key);
   switch (event.key) {
     case "ArrowRight":
       move("right");
@@ -245,6 +324,14 @@ document.addEventListener("keydown", (event) => {
       completedLine();
       startingTheGame();
       break;
+    case " ":
+      for (let i = 0; i < 20; i++) {
+        move("down");
+      }
+      cleaningVariables();
+      completedLine();
+      startingTheGame();
+      break;
   }
 });
 
@@ -253,8 +340,24 @@ creatingTheGrid();
 function startingTheGame() {
   callingTetromino();
   drawingTetromino(getTetrominoCell(currentTetromino));
+  /*
+  intervalId = window.setInterval(function () {
+    // call your function here
+    move("down");
+  }, 25000 / 60);*/
 }
-
+function pauseTheGame() {
+  if (pauseButton.innerText === "Pause") {
+    clearInterval(intervalId);
+    pauseButton.innerText = "Resume";
+  } else {
+    intervalId = window.setInterval(function () {
+      // call your function here
+      move("down");
+    }, 25000 / 60);
+    pauseButton.innerText = "Pause";
+  }
+}
 function cleaningVariables() {
   startX = 4;
   startY = -1;
@@ -267,12 +370,10 @@ var intervalId = window.setInterval(function () {
 }, 500);
 */
 
+//allTheCells[9].classList.add("colored");
+//allTheCells[19].classList.add("colored");
 startButton.addEventListener("click", startingTheGame);
-
-allTheCells[195].classList.add("colored");
-allTheCells[194].classList.add("colored");
-allTheCells[196].classList.add("colored");
-allTheCells[197].classList.add("colored");
+pauseButton.addEventListener("click", callingTetromino);
 
 allTheCells[60].classList.add("colored");
 allTheCells[61].classList.add("colored");
@@ -283,6 +384,11 @@ allTheCells[88].classList.add("colored");
 allTheCells[88].setAttribute("color", "violet");
 allTheCells[89].classList.add("colored");
 allTheCells[89].setAttribute("color", "violet");
+/*
+allTheCells[195].classList.add("colored");
+allTheCells[194].classList.add("colored");
+allTheCells[196].classList.add("colored");
+allTheCells[197].classList.add("colored");
 
 allTheCells[150].classList.add("colored");
 allTheCells[150].setAttribute("color", "violet");
@@ -328,3 +434,4 @@ allTheCells[149].setAttribute("color", "azure");
 
 allTheCells[165].classList.add("colored");
 allTheCells[165].setAttribute("color", "azure");
+*/
