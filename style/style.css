@@ -21,7 +21,7 @@ main {
   justify-content: center;
 }
 .grid {
-  background-color: black;
+  background-color: #1d4851;
   max-width: 200px;
   min-width: 200px;
   height: 400px;

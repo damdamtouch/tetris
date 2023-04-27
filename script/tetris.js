@@ -25,7 +25,6 @@ let newlineID = 0;
 let intervalToLock = 0;
 
 //Save data for the rotation test
-//let savedTetrominoToTest = [];
 let savedCurrentCells = [];
 
 // Var for deleting completed row
@@ -53,19 +52,14 @@ function creatingTheGrid() {
 function creatingTheBagOfTetromino() {
   //Creating a bag of tetromino, with a length of 14 (tetris guidelines)
   myListOfTetromino.sort(() => Math.random() - 0.5);
+  //console.log("we are creating the bag", myListOfTetromino);
 }
 function callingTetromino() {
   if (tetrominoIndex === 7) {
-    console.log("we reached 7");
-    creatingTheBagOfTetromino;
+    //console.log("we reached 7");
+    creatingTheBagOfTetromino();
     tetrominoIndex = 0;
   }
-  //tetrominoIndex = Math.floor(Math.random() * myListOfTetromino.length);
-  //console.log("hello from calling tetromino");
-  //const index = 1;
-  //tetrominoPicked[tetrominoIndex] += 1;
-
-  //because you can't have the tetromino S and Z more than for times in a row
 
   currentTetromino = myListOfTetromino[tetrominoIndex].matrix;
   colorToApply = myListOfTetromino[tetrominoIndex].color;
@@ -84,7 +78,7 @@ function getTetrominoCell(currentTetromino) {
       }
     }
   }
-  console.log("end of getTetrominoCell ", cellsToDraw);
+  //console.log("end of getTetrominoCell ", cellsToDraw);
   return cellsToDraw;
 }
 
@@ -99,7 +93,7 @@ function getTetrominoCellToTest(tetrominoToTest) {
       }
     }
   }
-  console.log("end of getTetrominoCellToTest ", cellsToTest);
+  //console.log("end of getTetrominoCellToTest ", cellsToTest);
   return cellsToTest;
 }
 
@@ -107,7 +101,7 @@ function getTetrominoCellToTest(tetrominoToTest) {
 
 function checkIfCollide(cellsToDraw, direction) {
   //console.log("check colide with direction", direction);
-  console.log("salut les cells to draw", cellsToDraw, direction);
+  //console.log("salut les cells to draw", cellsToDraw, direction);
 
   //Testing collisions down/left/right
   if (
@@ -127,7 +121,7 @@ function checkIfCollide(cellsToDraw, direction) {
         return allTheCells[cell].classList.contains("colored");
       } else if (direction === "left") {
         if (cell % 10 === 0) {
-          console.log("found a border left");
+          //console.log("found a border left");
           return true;
         } else {
           //console.log("found something on left");
@@ -135,57 +129,57 @@ function checkIfCollide(cellsToDraw, direction) {
         }
       } else if (direction === "right") {
         if ((cell + 1) % 10 === 0) {
-          console.log("found a border right");
+          //console.log("found a border right");
           return true;
         } else {
           return allTheCells[cell + 1].classList.contains("colored");
         }
       }
     });
-    console.log(touched, " touche");
+    //console.log(touched, " touche");
     return touched;
     //Starting to test if the rotation is possible
   } else if (direction === "up") {
     let isColliding = false;
     savedCurrentCells = cellsToDraw;
-    console.log("we saved the cellsToDraw", cellsToDraw);
+    //console.log("we saved the cellsToDraw", cellsToDraw);
 
-    console.log("we gonna rotate to test");
+    //console.log("we gonna rotate to test");
     let rotatedTetromino = structuredClone(currentTetromino);
     rotateTetromino(rotatedTetromino);
 
     let theNewPosition = getTetrominoCellToTest(rotatedTetromino);
-    console.log("we will now check this position", theNewPosition);
+    //console.log("we will now check this position", theNewPosition);
     let sideOfTheScreen = "";
     //Start testing
     theNewPosition.some((cell) => {
       if (cell > 200) {
-        console.log("can't go too down");
+        //console.log("can't go too down");
         isColliding = true;
         return;
       }
       savedCurrentCells.some((currentCell) => {
         if (currentCell.toString().slice(-1) < 5) {
-          console.log("we're on the left of the screen");
+          //console.log("we're on the left of the screen");
           sideOfTheScreen = "left";
         } else {
-          console.log("we're on the right of the screen");
+          //console.log("we're on the right of the screen");
           sideOfTheScreen = "right";
         }
       });
       if (allTheCells[cell].classList.contains("colored")) {
-        console.log("Hello !!!!! FOUND");
+        //console.log("Hello !!!!! FOUND");
         isColliding = true;
-        console.log("there is a colored where you want to rotate", cell);
+        //console.log("there is a colored where you want to rotate", cell);
       }
       //Here we're testing if the rotated list of cell are going on the other side of the screen
       if (sideOfTheScreen === "left" && (cell % 10).toString().endsWith("9")) {
-        console.log("probleme with border on left");
-        console.log("with cell ", cell);
+        //console.log("probleme with border on left");
+        //console.log("with cell ", cell);
         isColliding = true;
       } else if (sideOfTheScreen === "right" && cell % 10 === 0) {
-        console.log("probleme with border on right");
-        console.log("with cell ", cell);
+        //console.log("probleme with border on right");
+        //console.log("with cell ", cell);
         isColliding = true;
       }
     });
@@ -328,7 +322,7 @@ function goingDown() {
 }
 
 let test = document.addEventListener("keydown", (event) => {
-  console.log(event.key);
+  //console.log(event.key);
   switch (event.key) {
     case "ArrowRight":
       move("right");
@@ -367,7 +361,7 @@ function startingTheGame(storedTetromino) {
   } else {
     callingTetromino();
     getTetrominoCell(currentTetromino);
-    console.log(cellsToDraw);
+    //console.log(cellsToDraw);
     if (!checkIfCollide(cellsToDraw, "losing")) {
       drawingTetromino(cellsToDraw);
     } else {
@@ -378,9 +372,9 @@ function startingTheGame(storedTetromino) {
 }
 
 function keepThePiece() {
-  console.log("you want to keep ", currentTetromino);
+  //console.log("you want to keep ", currentTetromino);
   if (keepedTetromino.length !== 0) {
-    console.log("and now here");
+    // console.log("and now here");
     const currentTetrominoToStore = currentTetromino;
     const currentColorToStore = colorToApply;
     colorToApply = keepedColor;
@@ -389,7 +383,7 @@ function keepThePiece() {
     keepedTetromino = currentTetrominoToStore;
     keepedColor = currentColorToStore;
   } else {
-    console.log("i shlould be here");
+    //console.log("i shlould be here");
     keepedTetromino = currentTetromino;
     keepedColor = colorToApply;
     cleanTetromino(cellsToDraw);
@@ -425,14 +419,14 @@ function cleaningVariables() {
 }
 
 function startingNewPiece() {
-  console.log("create new piece");
+  //console.log("create new piece");
   cleaningVariables();
   completedLine();
   startingTheGame();
 }
 
 function createNewBottomLine() {
-  console.log("actual place of tetromino", cellsToDraw);
+  //console.log("actual place of tetromino", cellsToDraw);
   cleanTetromino(cellsToDraw);
   let listOfColoredCellToMoveUp = [];
   allTheCells.forEach((cell, index) => {
@@ -458,8 +452,8 @@ function createNewBottomLine() {
     }
   });
   const cellToLetEmpty = Math.floor(Math.random() * 9 + 190);
-  console.log(cellToLetEmpty);
-  for (let i = 190; i <= 200; i++) {
+  //console.log(cellToLetEmpty);
+  for (let i = 190; i < 200; i++) {
     if (i !== cellToLetEmpty) {
       allTheCells[i].classList.add("colored");
       allTheCells[i].setAttribute("color", "gray");
@@ -468,7 +462,7 @@ function createNewBottomLine() {
 }
 
 function playButton() {
-  newlineID = window.setInterval(createNewBottomLine, 30000);
+  newlineID = window.setInterval(createNewBottomLine, 10000);
   downID = window.setInterval(function () {
     move("down");
   }, 1000);
