@@ -105,18 +105,21 @@ function checkIfCollide(cellsToDraw, direction) {
   console.log("salut les cells to draw", cellsToDraw, direction);
 
   //Testing collisions down/left/right
-  if (direction === "down" || direction === "left" || direction === "right") {
+  if (
+    direction === "down" ||
+    direction === "left" ||
+    direction === "right" ||
+    direction === "losing"
+  ) {
     const touched = cellsToDraw.some((cell, index) => {
       if (direction === "down") {
         //console.log("this is the cell", cell);
         if (cell + 10 >= 200) {
-          //cantGoDown = true;
           return true;
         }
-        // if (allTheCells[cell + 10].classList.contains("colored")) {
-        //   startingTheGame();
-        // }
         return allTheCells[cell + 10].classList.contains("colored");
+      } else if (direction === "losing") {
+        return allTheCells[cell].classList.contains("colored");
       } else if (direction === "left") {
         if (cell % 10 === 0) {
           console.log("found a border left");
@@ -316,10 +319,11 @@ function spaceBarPressed() {
   startingTheGame();
 }
 
+// The function to go down, it resets automaticaly the interval that will call a new piece after 1,5sec without moving
 function goingDown() {
   startX += 10;
   clearInterval(intervalToLock);
-  intervalToLock = setTimeout(() => startingNewPiece(), 2000);
+  intervalToLock = setTimeout(() => startingNewPiece(), 1500);
   cellsToDraw.forEach((cell, index) => (cellsToDraw[index] = cell + 10));
 }
 
@@ -350,8 +354,16 @@ document.addEventListener("keydown", (event) => {
 creatingTheGrid();
 
 function startingTheGame() {
+  console.log("hello from starting the game");
   callingTetromino();
-  drawingTetromino(getTetrominoCell(currentTetromino));
+  getTetrominoCell(currentTetromino);
+  console.log(cellsToDraw);
+  if (!checkIfCollide(cellsToDraw, "losing")) {
+    drawingTetromino(cellsToDraw);
+  } else {
+    console.log("lost the game");
+    pauseTheGame();
+  }
 }
 
 function pauseTheGame() {
@@ -390,6 +402,7 @@ function playButton() {
     move("down");
   }, 1000);
   startingTheGame();
+  startButton.disabled = true;
 }
 
 // Drawing cells for the tests
@@ -399,16 +412,20 @@ function playButton() {
 startButton.addEventListener("click", playButton);
 pauseButton.addEventListener("click", pauseTheGame);
 
-allTheCells[160].classList.add("colored");
-allTheCells[161].classList.add("colored");
-allTheCells[170].classList.add("colored");
-allTheCells[171].classList.add("colored");
+allTheCells[110].classList.add("colored");
+allTheCells[111].classList.add("colored");
+allTheCells[113].classList.add("colored");
+allTheCells[112].classList.add("colored");
 
-allTheCells[188].classList.add("colored");
-allTheCells[188].setAttribute("color", "violet");
-allTheCells[189].classList.add("colored");
-allTheCells[189].setAttribute("color", "violet");
+allTheCells[114].classList.add("colored");
+allTheCells[115].setAttribute("color", "violet");
+allTheCells[116].classList.add("colored");
+allTheCells[117].setAttribute("color", "violet");
 
+allTheCells[124].classList.add("colored");
+allTheCells[125].setAttribute("color", "violet");
+allTheCells[126].classList.add("colored");
+allTheCells[127].setAttribute("color", "violet");
 /*
 allTheCells[195].classList.add("colored");
 allTheCells[194].classList.add("colored");
