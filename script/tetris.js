@@ -366,9 +366,25 @@ function startingTheGame(storedTetromino) {
       drawingTetromino(cellsToDraw);
     } else {
       if (alert("you lose looser")) {
-      } else window.location.reload();
+      } else resetingTheGame();
     }
   }
+}
+
+function resetingTheGame() {
+  allTheCells.forEach((cell, index) => {
+    if (cell.classList.contains("colored")) {
+      allTheCells[index].classList.remove("colored");
+      allTheCells[index].setAttribute("color", "");
+    }
+  });
+  document.getElementById("lines").innerText = 0;
+  document.getElementById("score").innerText = 0;
+  clearInterval(newlineID);
+  clearInterval(intervalToLock);
+  clearInterval(downID);
+  cleaningVariables();
+  startButton.disabled = false;
 }
 
 function keepThePiece() {
@@ -403,10 +419,7 @@ function pauseTheGame() {
   } else {
     newlineID = window.setInterval(createNewBottomLine, 10000);
     intervalToLock = setTimeout(() => startingNewPiece(), 2000);
-    downID = window.setInterval(function () {
-      // call your function here
-      move("down");
-    }, 1000);
+    downID = window.setInterval(() => move("down"), 1000);
     pauseButton.innerText = "Pause";
   }
 }
