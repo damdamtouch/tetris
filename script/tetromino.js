@@ -73,9 +73,9 @@ export const tetrominoI = new tetromino(
   "tetroI",
   [
     [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
     [1, 1, 1, 1],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
   ],
   "azure"
 );

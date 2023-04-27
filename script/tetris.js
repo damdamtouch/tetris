@@ -1,10 +1,12 @@
 import { myListOfTetromino } from "./tetromino.js";
+import { activeMobileMode } from "./mobileSupport.js";
 
 // HTML Elements
 const startButton = document.getElementById("start");
 const pauseButton = document.getElementById("pause");
 const gridElement = document.querySelector(".grid");
 const allTheCells = [];
+activeMobileMode();
 
 // Default var
 let startX = 4;
@@ -16,7 +18,7 @@ let currentTetromino = [];
 let intervalId = 0;
 let tetrominoPicked = [0, 0, 0, 0, 0, 0, 0];
 let tetrominoSZinaRow = 0;
-let cantGoDown = Boolean;
+let downID = 0;
 let intervalToLock = 0;
 
 //Save data for the rotation test
@@ -44,12 +46,12 @@ function creatingTheGrid() {
   }
 }
 
-//Function to call tetromino
+//Function to call the matrix of a tetromino
 
 function callingTetromino() {
-  //const index = Math.floor(Math.random() * myListOfTetromino.length);
+  const index = Math.floor(Math.random() * myListOfTetromino.length);
   console.log("hello from calling tetromino");
-  const index = 1;
+  //const index = 1;
   tetrominoPicked[index] += 1;
 
   //because you can't have the tetromino S and Z more than for times in a row
@@ -83,17 +85,17 @@ function getTetrominoCell(currentTetromino) {
 
 //Re-Creating the function that create the list of new cell to make test (the above edit "cellToDraw" general variable and make actual change)
 function getTetrominoCellToTest(tetrominoToTest) {
-  let cellsToTert = [];
+  let cellsToTest = [];
   for (let i = 0; i < tetrominoToTest.length; i++) {
     for (let j = 0; j < tetrominoToTest[i].length; j++) {
       if (tetrominoToTest[i][j]) {
         let myInlineRowPosition = startX + i * 10 + j + startY;
-        cellsToTert.push(myInlineRowPosition);
+        cellsToTest.push(myInlineRowPosition);
       }
     }
   }
-  console.log("end of getTetrominoCellToTest ", cellsToTert);
-  return cellsToTert;
+  console.log("end of getTetrominoCellToTest ", cellsToTest);
+  return cellsToTest;
 }
 
 // STARTING THE TESTS
@@ -108,7 +110,7 @@ function checkIfCollide(cellsToDraw, direction) {
       if (direction === "down") {
         //console.log("this is the cell", cell);
         if (cell + 10 >= 200) {
-          cantGoDown = true;
+          //cantGoDown = true;
           return true;
         }
         // if (allTheCells[cell + 10].classList.contains("colored")) {
@@ -120,7 +122,7 @@ function checkIfCollide(cellsToDraw, direction) {
           console.log("found a border left");
           return true;
         } else {
-          //console.log("found something on leftt");
+          //console.log("found something on left");
           return allTheCells[cell - 1].classList.contains("colored");
         }
       } else if (direction === "right") {
@@ -249,6 +251,9 @@ function cleanTetromino(cellsToClean) {
     allTheCells[cell].setAttribute("color", "");
   }
 }
+//END OF DRAWING AND DELETING
+
+//MOVING FUNCTION => Will launch the collisions tests
 
 function move(direction) {
   cleanTetromino(cellsToDraw);
@@ -267,8 +272,9 @@ function move(direction) {
     if (!checkIfCollide(cellsToDraw, "down")) {
       goingDown();
     } else {
+      /*
       drawingTetromino(cellsToDraw);
-      startingTheGame();
+      startingTheGame();*/
     }
   } else if (direction === "up") {
     if (!checkIfCollide(cellsToDraw, direction)) {
@@ -284,7 +290,7 @@ function move(direction) {
   drawingTetromino(cellsToDraw);
 }
 
-//Honesty force me to admit this is not my code... tried to use .map()
+//Rotate the Matrix of the selected tetromino  : Honesty force me to admit this is not my code... tried to use .map()
 function rotateTetromino(tetrominoToRotate) {
   let n = tetrominoToRotate.length;
   for (let i = 0; i < n / 2; i++) {
@@ -299,9 +305,21 @@ function rotateTetromino(tetrominoToRotate) {
   return tetrominoToRotate;
 }
 
+//Function to go down
+
+function spaceBarPressed() {
+  for (let i = 0; i < 20; i++) {
+    move("down");
+  }
+  cleaningVariables();
+  completedLine();
+  startingTheGame();
+}
+
 function goingDown() {
   startX += 10;
-  // setTimeout(() => startingTheGame, 3000);
+  clearInterval(intervalToLock);
+  intervalToLock = setTimeout(() => startingNewPiece(), 2000);
   cellsToDraw.forEach((cell, index) => (cellsToDraw[index] = cell + 10));
 }
 
@@ -324,12 +342,7 @@ document.addEventListener("keydown", (event) => {
       startingNewPiece();
       break;
     case " ":
-      for (let i = 0; i < 20; i++) {
-        move("down");
-      }
-      cleaningVariables();
-      completedLine();
-      startingTheGame();
+      spaceBarPressed();
       break;
   }
 });
@@ -337,33 +350,30 @@ document.addEventListener("keydown", (event) => {
 creatingTheGrid();
 
 function startingTheGame() {
-  // intervalToLock = setTimeout(startingNewPiece, 3000);
-  //intervalToLock = setTimeout(() => console.log("salut"), 3000);
-  startingNewPiece();
   callingTetromino();
   drawingTetromino(getTetrominoCell(currentTetromino));
-  /*
-  intervalId = window.setInterval(function () {
-    // call your function here
-    move("down");
-  }, 25000 / 60);*/
 }
+
 function pauseTheGame() {
   if (pauseButton.innerText === "Pause") {
-    clearInterval(intervalId);
+    clearInterval(intervalToLock);
+    clearInterval(downID);
     pauseButton.innerText = "Resume";
   } else {
-    intervalId = window.setInterval(function () {
+    intervalToLock = setTimeout(() => startingNewPiece(), 2000);
+    downID = window.setInterval(function () {
       // call your function here
       move("down");
-    }, 25000 / 60);
+    }, 1000);
     pauseButton.innerText = "Pause";
   }
 }
+
 function cleaningVariables() {
   startX = 4;
   startY = -1;
   listOfColoredCell = [];
+  cellsToDraw = [];
 }
 
 function startingNewPiece() {
@@ -371,28 +381,33 @@ function startingNewPiece() {
   console.log("create new piece");
   cleaningVariables();
   completedLine();
-  // startingTheGame();
+  startingTheGame();
 }
 
-let downID = window.setInterval(function () {
-  // call your function here
-  move("down");
-}, 1000);
+function playButton() {
+  downID = window.setInterval(function () {
+    // call your function here
+    move("down");
+  }, 1000);
+  startingTheGame();
+}
 
+// Drawing cells for the tests
 //allTheCells[9].classList.add("colored");
 //allTheCells[19].classList.add("colored");
-startButton.addEventListener("click", startingTheGame);
-pauseButton.addEventListener("click", callingTetromino);
 
-allTheCells[60].classList.add("colored");
-allTheCells[61].classList.add("colored");
-allTheCells[70].classList.add("colored");
-allTheCells[71].classList.add("colored");
+startButton.addEventListener("click", playButton);
+pauseButton.addEventListener("click", pauseTheGame);
 
-allTheCells[88].classList.add("colored");
-allTheCells[88].setAttribute("color", "violet");
-allTheCells[89].classList.add("colored");
-allTheCells[89].setAttribute("color", "violet");
+allTheCells[160].classList.add("colored");
+allTheCells[161].classList.add("colored");
+allTheCells[170].classList.add("colored");
+allTheCells[171].classList.add("colored");
+
+allTheCells[188].classList.add("colored");
+allTheCells[188].setAttribute("color", "violet");
+allTheCells[189].classList.add("colored");
+allTheCells[189].setAttribute("color", "violet");
 
 /*
 allTheCells[195].classList.add("colored");
@@ -445,40 +460,3 @@ allTheCells[149].setAttribute("color", "azure");
 allTheCells[165].classList.add("colored");
 allTheCells[165].setAttribute("color", "azure");
 */
-
-function activeMobileMode() {
-  let touchstartX = 0;
-  let touchendX = 0;
-
-  let touchstartY = 0;
-  let touchendY = 0;
-
-  function checkDirectionLeftRight() {
-    if (touchendX < touchstartX - 10) move("left");
-    if (touchendX > touchstartX + 10) move("right");
-  }
-
-  document.addEventListener("touchstart", (e) => {
-    touchstartX = e.changedTouches[0].screenX;
-  });
-
-  document.addEventListener("touchend", (e) => {
-    touchendX = e.changedTouches[0].screenX;
-    checkDirectionLeftRight();
-  });
-
-  function checkDirectionUpDown() {
-    if (touchendY < touchstartY - 10) move("up");
-    if (touchendY > touchstartY + 10) move("down");
-  }
-
-  document.addEventListener("touchstart", (e) => {
-    touchstartY = e.changedTouches[0].screenY;
-  });
-
-  document.addEventListener("touchend", (e) => {
-    touchendY = e.changedTouches[0].screenY;
-    checkDirectionUpDown();
-  });
-}
-activeMobileMode();

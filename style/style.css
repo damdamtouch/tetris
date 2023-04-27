@@ -1,9 +1,18 @@
+@font-face {
+  font-family: "Tetris";
+  src: local("Tetris"), url("./Tetris.ttf") format("truetype");
+}
+
 * {
   box-sizing: border-box;
   text-align: center;
 }
 html {
+  font-family: "Tetris";
   background-color: black;
+  background: url(../background.jpg) no-repeat center center fixed;
+  background-position: left;
+  background-size: cover;
 }
 
 main {
@@ -12,7 +21,7 @@ main {
   margin-top: 3rem;
 }
 .grid {
-  background-color: white;
+  background-color: black;
   max-width: 200px;
   min-width: 200px;
   height: 400px;
@@ -23,7 +32,7 @@ main {
 .cell {
   width: 20px;
   aspect-ratio: 1;
-  border: 1px solid black;
+  border: 1px solid white;
 }
 
 .colored {
