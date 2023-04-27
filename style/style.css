@@ -10,7 +10,7 @@
 html {
   font-family: "Tetris";
   background-color: black;
-  background: url(../background.jpg) no-repeat center center fixed;
+  background: url(../media/background.jpg) no-repeat center center fixed;
   background-position: left;
   background-size: cover;
 }
@@ -71,7 +71,8 @@ main {
   background-color: #4caf50;
   height: 40px;
   width: 100px;
-  font-size: 16px;
+  font-size: 1rem;
+  font-family: inherit;
   margin-top: 20px;
   cursor: pointer;
 }

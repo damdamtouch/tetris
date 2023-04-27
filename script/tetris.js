@@ -327,7 +327,7 @@ function goingDown() {
   cellsToDraw.forEach((cell, index) => (cellsToDraw[index] = cell + 10));
 }
 
-document.addEventListener("keydown", (event) => {
+let test = document.addEventListener("keydown", (event) => {
   //console.log(event.key);
   switch (event.key) {
     case "ArrowRight":
@@ -343,7 +343,7 @@ document.addEventListener("keydown", (event) => {
       move("up");
       break;
     case "Enter":
-      startingNewPiece();
+      pauseTheGame();
       break;
     case " ":
       spaceBarPressed();
@@ -361,8 +361,10 @@ function startingTheGame() {
   if (!checkIfCollide(cellsToDraw, "losing")) {
     drawingTetromino(cellsToDraw);
   } else {
-    console.log("lost the game");
-    pauseTheGame();
+    if (alert("you lose looser")) {
+    } else window.location.reload();
+
+    //pauseTheGame();
   }
 }
 
@@ -370,6 +372,7 @@ function pauseTheGame() {
   if (pauseButton.innerText === "Pause") {
     clearInterval(intervalToLock);
     clearInterval(downID);
+    document.removeEventListener("keydown", (event) => {});
     pauseButton.innerText = "Resume";
   } else {
     intervalToLock = setTimeout(() => startingNewPiece(), 2000);
@@ -411,7 +414,7 @@ function playButton() {
 
 startButton.addEventListener("click", playButton);
 pauseButton.addEventListener("click", pauseTheGame);
-
+/*
 allTheCells[110].classList.add("colored");
 allTheCells[111].classList.add("colored");
 allTheCells[113].classList.add("colored");
@@ -426,6 +429,7 @@ allTheCells[124].classList.add("colored");
 allTheCells[125].setAttribute("color", "violet");
 allTheCells[126].classList.add("colored");
 allTheCells[127].setAttribute("color", "violet");
+*/
 /*
 allTheCells[195].classList.add("colored");
 allTheCells[194].classList.add("colored");
