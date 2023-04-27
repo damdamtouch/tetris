@@ -15,6 +15,7 @@ let theGrid = [];
 let cellsToDraw = [];
 let colorToApply = "";
 let currentTetromino = [];
+const bagOfTetromino = [];
 let tetrominoIndex = 0;
 let tetrominoPicked = [0, 0, 0, 0, 0, 0, 0];
 let keepedTetromino = [];
@@ -22,7 +23,6 @@ let keepedColor = "blue";
 let downID = 0;
 let newlineID = 0;
 let intervalToLock = 0;
-let tetrominoSZinaRow = 0;
 
 //Save data for the rotation test
 //let savedTetrominoToTest = [];
@@ -30,9 +30,7 @@ let savedCurrentCells = [];
 
 // Var for deleting completed row
 let listOfColoredCell = [];
-let listOfColoredCellToMoveUp = [];
 let completedRow = 0;
-let score = 0;
 
 // STARTING THE GAME
 function creatingTheGrid() {
@@ -52,23 +50,26 @@ function creatingTheGrid() {
 
 //Function to call the matrix of a tetromino
 
+function creatingTheBagOfTetromino() {
+  //Creating a bag of tetromino, with a length of 14 (tetris guidelines)
+  myListOfTetromino.sort(() => Math.random() - 0.5);
+}
 function callingTetromino() {
-  tetrominoIndex = Math.floor(Math.random() * myListOfTetromino.length);
+  if (tetrominoIndex === 7) {
+    console.log("we reached 7");
+    creatingTheBagOfTetromino;
+    tetrominoIndex = 0;
+  }
+  //tetrominoIndex = Math.floor(Math.random() * myListOfTetromino.length);
   //console.log("hello from calling tetromino");
   //const index = 1;
-  tetrominoPicked[tetrominoIndex] += 1;
+  //tetrominoPicked[tetrominoIndex] += 1;
 
   //because you can't have the tetromino S and Z more than for times in a row
-  if (tetrominoIndex === 3) {
-    tetrominoSZinaRow += 1;
-  } else if (tetrominoIndex === 4) {
-    tetrominoSZinaRow += 1;
-  } else {
-    tetrominoSZinaRow = 0;
-  }
 
   currentTetromino = myListOfTetromino[tetrominoIndex].matrix;
   colorToApply = myListOfTetromino[tetrominoIndex].color;
+  tetrominoIndex++;
   //console.log(tetrominoPicked);
 }
 
@@ -348,8 +349,8 @@ let test = document.addEventListener("keydown", (event) => {
       spaceBarPressed();
       break;
     case "k":
-      createNewBottomLine();
-      //keepThePiece();
+      //creatingTheBagOfTetromino();
+      keepThePiece();
       break;
   }
 });
@@ -406,7 +407,7 @@ function pauseTheGame() {
     document.removeEventListener("keydown", (event) => {});
     pauseButton.innerText = "Resume";
   } else {
-    newlineID = window.setInterval(createNewBottomLine, 30000);
+    newlineID = window.setInterval(createNewBottomLine, 10000);
     intervalToLock = setTimeout(() => startingNewPiece(), 2000);
     downID = window.setInterval(function () {
       // call your function here

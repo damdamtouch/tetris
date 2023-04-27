@@ -12,9 +12,8 @@ export const myListOfTetromino = [];
 export const tetro0 = new tetromino(
   "tetro0",
   [
-    [0, 0, 0],
-    [1, 1, 0],
-    [1, 1, 0],
+    [1, 1],
+    [1, 1],
   ],
   "yellow"
 );
