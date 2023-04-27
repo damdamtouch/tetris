@@ -50,7 +50,7 @@ function creatingTheGrid() {
 
 function callingTetromino() {
   const index = Math.floor(Math.random() * myListOfTetromino.length);
-  console.log("hello from calling tetromino");
+  //console.log("hello from calling tetromino");
   //const index = 1;
   tetrominoPicked[index] += 1;
 
@@ -258,7 +258,7 @@ function cleanTetromino(cellsToClean) {
 
 //MOVING FUNCTION => Will launch the collisions tests
 
-function move(direction) {
+export function move(direction) {
   cleanTetromino(cellsToDraw);
   if (direction === "left") {
     if (!checkIfCollide(cellsToDraw, direction)) {
@@ -354,7 +354,7 @@ let test = document.addEventListener("keydown", (event) => {
 creatingTheGrid();
 
 function startingTheGame() {
-  console.log("hello from starting the game");
+  //console.log("hello from starting the game");
   callingTetromino();
   getTetrominoCell(currentTetromino);
   console.log(cellsToDraw);
@@ -408,76 +408,5 @@ function playButton() {
   startButton.disabled = true;
 }
 
-// Drawing cells for the tests
-//allTheCells[9].classList.add("colored");
-//allTheCells[19].classList.add("colored");
-
 startButton.addEventListener("click", playButton);
 pauseButton.addEventListener("click", pauseTheGame);
-/*
-allTheCells[110].classList.add("colored");
-allTheCells[111].classList.add("colored");
-allTheCells[113].classList.add("colored");
-allTheCells[112].classList.add("colored");
-
-allTheCells[114].classList.add("colored");
-allTheCells[115].setAttribute("color", "violet");
-allTheCells[116].classList.add("colored");
-allTheCells[117].setAttribute("color", "violet");
-
-allTheCells[124].classList.add("colored");
-allTheCells[125].setAttribute("color", "violet");
-allTheCells[126].classList.add("colored");
-allTheCells[127].setAttribute("color", "violet");
-*/
-/*
-allTheCells[195].classList.add("colored");
-allTheCells[194].classList.add("colored");
-allTheCells[196].classList.add("colored");
-allTheCells[197].classList.add("colored");
-
-allTheCells[150].classList.add("colored");
-allTheCells[150].setAttribute("color", "violet");
-allTheCells[151].classList.add("colored");
-allTheCells[151].setAttribute("color", "violet");
-allTheCells[152].classList.add("colored");
-allTheCells[152].setAttribute("color", "violet");
-allTheCells[153].classList.add("colored");
-allTheCells[153].setAttribute("color", "violet");
-allTheCells[154].classList.add("colored");
-allTheCells[154].setAttribute("color", "violet");
-allTheCells[155].classList.add("colored");
-allTheCells[155].setAttribute("color", "violet");
-allTheCells[156].classList.add("colored");
-allTheCells[156].setAttribute("color", "violet");
-allTheCells[157].classList.add("colored");
-allTheCells[157].setAttribute("color", "violet");
-allTheCells[158].classList.add("colored");
-allTheCells[158].setAttribute("color", "violet");
-allTheCells[159].classList.add("colored");
-allTheCells[159].setAttribute("color", "violet");
-
-allTheCells[140].classList.add("colored");
-allTheCells[140].setAttribute("color", "azure");
-allTheCells[141].classList.add("colored");
-allTheCells[141].setAttribute("color", "azure");
-allTheCells[142].classList.add("colored");
-allTheCells[142].setAttribute("color", "azure");
-allTheCells[143].classList.add("colored");
-allTheCells[143].setAttribute("color", "azure");
-allTheCells[144].classList.add("colored");
-allTheCells[144].setAttribute("color", "azure");
-allTheCells[145].classList.add("colored");
-allTheCells[145].setAttribute("color", "orange");
-allTheCells[146].classList.add("colored");
-allTheCells[146].setAttribute("color", "azure");
-allTheCells[147].classList.add("colored");
-allTheCells[147].setAttribute("color", "azure");
-allTheCells[148].classList.add("colored");
-allTheCells[148].setAttribute("color", "azure");
-allTheCells[149].classList.add("colored");
-allTheCells[149].setAttribute("color", "azure");
-
-allTheCells[165].classList.add("colored");
-allTheCells[165].setAttribute("color", "azure");
-*/

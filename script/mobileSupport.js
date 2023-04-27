@@ -1,6 +1,8 @@
 // Activating mobile mode
+import { move } from "./tetris.js";
 
 export function activeMobileMode() {
+  console.log("i'm called");
   let touchstartX = 0;
   let touchendX = 0;
 
