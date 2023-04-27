@@ -17,8 +17,8 @@ html {
 
 main {
   display: flex;
-  margin-left: 3rem;
   margin-top: 3rem;
+  justify-content: center;
 }
 .grid {
   background-color: black;
@@ -60,6 +60,9 @@ main {
 }
 [color="violet"] {
   background-color: #800080;
+}
+[color="gray"] {
+  background-color: gray;
 }
 .right-column {
   display: flex;

@@ -20,6 +20,7 @@ let tetrominoPicked = [0, 0, 0, 0, 0, 0, 0];
 let keepedTetromino = [];
 let keepedColor = "blue";
 let downID = 0;
+let newlineID = 0;
 let intervalToLock = 0;
 let tetrominoSZinaRow = 0;
 
@@ -29,6 +30,7 @@ let savedCurrentCells = [];
 
 // Var for deleting completed row
 let listOfColoredCell = [];
+let listOfColoredCellToMoveUp = [];
 let completedRow = 0;
 let score = 0;
 
@@ -198,7 +200,6 @@ function checkIfCollide(cellsToDraw, direction) {
 function completedLine() {
   let numberOfCellColoredPerRow = 0;
   listOfColoredCell = [];
-  console.log("hey");
   allTheCells.forEach((cell, index) => {
     if (index % 10 === 0) {
       //Reseting the compteur on first cell of each line
@@ -276,10 +277,6 @@ export function move(direction) {
     //console.log("checking the cells to draw ", cellsToDraw);
     if (!checkIfCollide(cellsToDraw, "down")) {
       goingDown();
-    } else {
-      /*
-      drawingTetromino(cellsToDraw);
-      startingTheGame();*/
     }
   } else if (direction === "up") {
     if (!checkIfCollide(cellsToDraw, direction)) {
@@ -351,7 +348,8 @@ let test = document.addEventListener("keydown", (event) => {
       spaceBarPressed();
       break;
     case "k":
-      keepThePiece();
+      createNewBottomLine();
+      //keepThePiece();
       break;
   }
 });
@@ -360,7 +358,6 @@ creatingTheGrid();
 
 function startingTheGame(storedTetromino) {
   //console.log("hello from starting the game");
-
   if (storedTetromino) {
     cleanTetromino(cellsToDraw);
     cleaningVariables();
@@ -376,8 +373,6 @@ function startingTheGame(storedTetromino) {
       if (alert("you lose looser")) {
       } else window.location.reload();
     }
-
-    //pauseTheGame();
   }
 }
 
@@ -405,11 +400,13 @@ function keepThePiece() {
 
 function pauseTheGame() {
   if (pauseButton.innerText === "Pause") {
+    clearInterval(newlineID);
     clearInterval(intervalToLock);
     clearInterval(downID);
     document.removeEventListener("keydown", (event) => {});
     pauseButton.innerText = "Resume";
   } else {
+    newlineID = window.setInterval(createNewBottomLine, 30000);
     intervalToLock = setTimeout(() => startingNewPiece(), 2000);
     downID = window.setInterval(function () {
       // call your function here
@@ -427,16 +424,51 @@ function cleaningVariables() {
 }
 
 function startingNewPiece() {
-  //intervalToLock = setInterval(startingNewPiece, 1000);
   console.log("create new piece");
   cleaningVariables();
   completedLine();
   startingTheGame();
 }
 
+function createNewBottomLine() {
+  console.log("actual place of tetromino", cellsToDraw);
+  cleanTetromino(cellsToDraw);
+  let listOfColoredCellToMoveUp = [];
+  allTheCells.forEach((cell, index) => {
+    if (cell.classList.contains("colored")) {
+      if (cell - 10 < 0) {
+        alert("you loose");
+      } else {
+        listOfColoredCellToMoveUp.push(index);
+      }
+    }
+  });
+  listOfColoredCellToMoveUp.forEach((coloredLineIndex) => {
+    if (coloredLineIndex) {
+      allTheCells[coloredLineIndex].classList.remove("colored");
+      let theColorAttribute =
+        allTheCells[coloredLineIndex].getAttribute("color");
+      allTheCells[coloredLineIndex].setAttribute("color", "");
+      allTheCells[coloredLineIndex - 10].classList.add("colored");
+      allTheCells[coloredLineIndex - 10].setAttribute(
+        "color",
+        theColorAttribute
+      );
+    }
+  });
+  const cellToLetEmpty = Math.floor(Math.random() * 9 + 190);
+  console.log(cellToLetEmpty);
+  for (let i = 190; i <= 200; i++) {
+    if (i !== cellToLetEmpty) {
+      allTheCells[i].classList.add("colored");
+      allTheCells[i].setAttribute("color", "gray");
+    }
+  }
+}
+
 function playButton() {
+  newlineID = window.setInterval(createNewBottomLine, 30000);
   downID = window.setInterval(function () {
-    // call your function here
     move("down");
   }, 1000);
   startingTheGame();
