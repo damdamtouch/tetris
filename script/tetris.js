@@ -15,11 +15,13 @@ let theGrid = [];
 let cellsToDraw = [];
 let colorToApply = "";
 let currentTetromino = [];
-let intervalId = 0;
+let tetrominoIndex = 0;
 let tetrominoPicked = [0, 0, 0, 0, 0, 0, 0];
-let tetrominoSZinaRow = 0;
+let keepedTetromino = [];
+let keepedColor = "blue";
 let downID = 0;
 let intervalToLock = 0;
+let tetrominoSZinaRow = 0;
 
 //Save data for the rotation test
 //let savedTetrominoToTest = [];
@@ -49,22 +51,22 @@ function creatingTheGrid() {
 //Function to call the matrix of a tetromino
 
 function callingTetromino() {
-  const index = Math.floor(Math.random() * myListOfTetromino.length);
+  tetrominoIndex = Math.floor(Math.random() * myListOfTetromino.length);
   //console.log("hello from calling tetromino");
   //const index = 1;
-  tetrominoPicked[index] += 1;
+  tetrominoPicked[tetrominoIndex] += 1;
 
   //because you can't have the tetromino S and Z more than for times in a row
-  if (index === 3) {
+  if (tetrominoIndex === 3) {
     tetrominoSZinaRow += 1;
-  } else if (index === 4) {
+  } else if (tetrominoIndex === 4) {
     tetrominoSZinaRow += 1;
   } else {
     tetrominoSZinaRow = 0;
   }
 
-  currentTetromino = myListOfTetromino[index].matrix;
-  colorToApply = myListOfTetromino[index].color;
+  currentTetromino = myListOfTetromino[tetrominoIndex].matrix;
+  colorToApply = myListOfTetromino[tetrominoIndex].color;
   //console.log(tetrominoPicked);
 }
 
@@ -328,7 +330,7 @@ function goingDown() {
 }
 
 let test = document.addEventListener("keydown", (event) => {
-  //console.log(event.key);
+  console.log(event.key);
   switch (event.key) {
     case "ArrowRight":
       move("right");
@@ -348,23 +350,56 @@ let test = document.addEventListener("keydown", (event) => {
     case " ":
       spaceBarPressed();
       break;
+    case "k":
+      keepThePiece();
+      break;
   }
 });
 
 creatingTheGrid();
 
-function startingTheGame() {
+function startingTheGame(storedTetromino) {
   //console.log("hello from starting the game");
-  callingTetromino();
-  getTetrominoCell(currentTetromino);
-  console.log(cellsToDraw);
-  if (!checkIfCollide(cellsToDraw, "losing")) {
+
+  if (storedTetromino) {
+    cleanTetromino(cellsToDraw);
+    cleaningVariables();
+    getTetrominoCell(storedTetromino);
     drawingTetromino(cellsToDraw);
   } else {
-    if (alert("you lose looser")) {
-    } else window.location.reload();
+    callingTetromino();
+    getTetrominoCell(currentTetromino);
+    console.log(cellsToDraw);
+    if (!checkIfCollide(cellsToDraw, "losing")) {
+      drawingTetromino(cellsToDraw);
+    } else {
+      if (alert("you lose looser")) {
+      } else window.location.reload();
+    }
 
     //pauseTheGame();
+  }
+}
+
+function keepThePiece() {
+  console.log("you want to keep ", currentTetromino);
+  if (keepedTetromino.length !== 0) {
+    console.log("and now here");
+    const currentTetrominoToStore = currentTetromino;
+    const currentColorToStore = colorToApply;
+    colorToApply = keepedColor;
+    currentTetromino = keepedTetromino;
+    startingTheGame(keepedTetromino);
+    keepedTetromino = currentTetrominoToStore;
+    keepedColor = currentColorToStore;
+  } else {
+    console.log("i shlould be here");
+    keepedTetromino = currentTetromino;
+    keepedColor = colorToApply;
+    cleanTetromino(cellsToDraw);
+    cleaningVariables();
+    completedLine();
+    startingTheGame();
   }
 }
 
