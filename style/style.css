@@ -21,7 +21,7 @@ main {
   justify-content: center;
 }
 .grid {
-  background-color: #1d4851;
+  background-color: #0d2f36cf;
   max-width: 200px;
   min-width: 200px;
   height: 400px;
@@ -53,13 +53,13 @@ main {
   background-color: #ff7f00;
 }
 [color="azure"] {
-  background-color: #00ffff;
+  background-color: #01cfd6;
 }
 [color="yellow"] {
-  background-color: #ffff00;
+  background-color: #ffc82e;
 }
 [color="violet"] {
-  background-color: #800080;
+  background-color: #a313ec;
 }
 [color="gray"] {
   background-color: gray;
@@ -83,4 +83,48 @@ main {
 .side-panel {
   color: white;
   padding-left: 30px;
+}
+
+#popup {
+  background-color: rgb(60, 98, 137);
+  border-radius: 30px;
+  height: 25rem;
+  width: 40rem;
+  display: none;
+  position: absolute;
+  padding: 1rem;
+}
+#popup button {
+  background-color: #4caf50;
+  height: 40px;
+  width: 100px;
+  font-size: 1rem;
+  font-family: inherit;
+  margin-top: 20px;
+  cursor: pointer;
+}
+.key {
+  color: white;
+}
+
+#looser-popup {
+  background-color: rgb(60, 98, 137);
+  border-radius: 30px;
+  height: 25rem;
+  width: 40rem;
+  display: none;
+  position: absolute;
+}
+
+#looser-popup button {
+  background-color: #4caf50;
+  height: 40px;
+  width: 100px;
+  font-size: 1rem;
+  font-family: inherit;
+  margin-top: 20px;
+  cursor: pointer;
+  padding-bottom: 3rem;
+  margin: auto;
+  margin-bottom: 3rem;
 }

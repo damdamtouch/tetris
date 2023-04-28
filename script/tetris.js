@@ -5,8 +5,16 @@ import { activeMobileMode } from "./mobileSupport.js";
 const startButton = document.getElementById("start");
 const pauseButton = document.getElementById("pause");
 const gridElement = document.querySelector(".grid");
+const popup = document.getElementById("popup");
+const looserPopup = document.getElementById("looser-popup");
+const popupButton = document.getElementById("popup-button");
+const looserButton = document.getElementById("looser-button");
 const allTheCells = [];
-activeMobileMode();
+
+popupButton.addEventListener("click", hideRules);
+looserButton.addEventListener("click", hideLooser);
+startButton.addEventListener("click", playButton);
+pauseButton.addEventListener("click", pauseTheGame);
 
 // Default var
 let startX = 4;
@@ -15,7 +23,6 @@ let theGrid = [];
 let cellsToDraw = [];
 let colorToApply = "";
 let currentTetromino = [];
-const bagOfTetromino = [];
 let tetrominoIndex = 0;
 let tetrominoPicked = [0, 0, 0, 0, 0, 0, 0];
 let keepedTetromino = [];
@@ -31,7 +38,14 @@ let savedCurrentCells = [];
 let listOfColoredCell = [];
 let completedRow = 0;
 
-// STARTING THE GAME
+// lauching the game
+
+activeMobileMode();
+displayRules();
+
+//-------------------------------------------- STARTING THE GAME ---------------------
+
+
 function creatingTheGrid() {
   for (let row = 0; row < 20; row++) {
     theGrid.push([]);
@@ -365,8 +379,7 @@ function startingTheGame(storedTetromino) {
     if (!checkIfCollide(cellsToDraw, "losing")) {
       drawingTetromino(cellsToDraw);
     } else {
-      if (alert("you lose looser")) {
-      } else resetingTheGame();
+      displayLooser();
     }
   }
 }
@@ -483,5 +496,18 @@ function playButton() {
   startButton.disabled = true;
 }
 
-startButton.addEventListener("click", playButton);
-pauseButton.addEventListener("click", pauseTheGame);
+function displayRules() {
+  popup.style.display = "block";
+}
+
+function hideRules() {
+  popup.style.display = "none";
+}
+
+function displayLooser() {
+  looserPopup.style.display = "block";
+}
+function hideLooser() {
+  looserPopup.style.display = "none";
+  resetingTheGame();
+}
