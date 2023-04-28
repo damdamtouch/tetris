@@ -120,7 +120,7 @@ Go to the URL, click on start, super simple :
 - Want to go make the piece go directly to its place ? `Bar space` !
 - You really like your actual piece and you want to keep it ? `K`
 
-For more examples, please refer to the [Documentation](https://github.com/damdamtouch/ironhack-project1/wiki)\_
+For more examples, please refer to the [Documentation](https://github.com/damdamtouch/ironhack-project1/wiki)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -143,8 +143,6 @@ Distributed under the MIT License.
 DamdamTouch - [@damdamtouch](https://twitter.com/damdamtouch)
 
 Other Projects : [https://github.com/damdamtouch/](https://github.com/damdamtouch/)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
