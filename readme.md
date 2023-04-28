@@ -70,7 +70,7 @@
 ## About The Project
 
   <a href="https://damdamtouch.github.io/ironhack-project1/">
-    <img src="https://raw.githubusercontent.com/damdamtouch/ironhack-project1/main/media/thegame.jpg" alt="screen" width="200" height="400">
+    <img src="https://raw.githubusercontent.com/damdamtouch/ironhack-project1/main/media/thegame.png" alt="screen" width="400" height="400">
   </a>
 
 Please enjoy playing to a little tetris. Very easy, no frills, just chill. May be still a bit buggy... Sorry about that !
