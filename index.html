@@ -25,9 +25,15 @@
         <br />
         <button id="pause" class="button">Pause</button>
         <br />
-        <br />
+        <button id="mute-button" class="button">Unmute</button>
         <!-- Just for FUN BECAUSE I LIKE THE FUN -->
-        <!-- <audio controls autoplay src="./media/Tetris.mp3" loop="true"></audio> -->
+        <audio
+          id="audio"
+          autoplay
+          muted
+          src="./media/Tetris.mp3"
+          loop="true"
+        ></audio>
       </div>
 
       <div id="popup">
@@ -58,8 +64,6 @@
         <h1>You are a looser</h1>
         <button id="looser-button">You're so right...</button>
       </div>
-      
-      
     </main>
   </body>
 </html>

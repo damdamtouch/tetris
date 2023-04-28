@@ -9,12 +9,16 @@ const popup = document.getElementById("popup");
 const looserPopup = document.getElementById("looser-popup");
 const popupButton = document.getElementById("popup-button");
 const looserButton = document.getElementById("looser-button");
+const muteButton = document.getElementById("mute-button");
+const audio = document.getElementById("audio");
+
 const allTheCells = [];
 
 popupButton.addEventListener("click", hideRules);
 looserButton.addEventListener("click", hideLooser);
 startButton.addEventListener("click", playButton);
 pauseButton.addEventListener("click", pauseTheGame);
+muteButton.addEventListener("click", mute);
 
 // Default var
 let startX = 4;
@@ -44,7 +48,6 @@ activeMobileMode();
 displayRules();
 
 //-------------------------------------------- STARTING THE GAME ---------------------
-
 
 function creatingTheGrid() {
   for (let row = 0; row < 20; row++) {
@@ -78,6 +81,7 @@ function callingTetromino() {
   currentTetromino = myListOfTetromino[tetrominoIndex].matrix;
   colorToApply = myListOfTetromino[tetrominoIndex].color;
   tetrominoIndex++;
+
   //console.log(tetrominoPicked);
 }
 
@@ -510,4 +514,16 @@ function displayLooser() {
 function hideLooser() {
   looserPopup.style.display = "none";
   resetingTheGame();
+}
+
+function mute() {
+  console.log("button clicked");
+  console.log(muteButton.innerText);
+  if ((muteButton.innerText == "Mute")) {
+    audio.muted = true;
+    muteButton.innerText = "Unmute";
+  } else if ((muteButton.innerText == "Unmute")) {
+    audio.muted = false;
+    muteButton.innerText = "Mute";
+  }
 }
