@@ -29,8 +29,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/damdamtouch/ironhack-project1">
-    <img src="https://raw.githubusercontent.com/damdamtouch/ironhack-project1/main/media/background.jpg" alt="Logo" width="88" height="80">
+  <a href="https://github.com/damdamtouch/tetris">
+    <img src="https://raw.githubusercontent.com/damdamtouch/tetris/main/media/background.jpg" alt="Logo" width="88" height="80">
   </a>
 
 <h3 align="center">Tetris</h3>
@@ -38,14 +38,14 @@
   <p align="center">
     A simple little Tetris done for Ironhack first project.
     <br />
-    <a href="https://github.com/damdamtouch/ironhack-project1"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/damdamtouch/tetris"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://damdamtouch.github.io/ironhack-project1/">View Demo</a>
+    <a href="https://damdamtouch.github.io/tetris/">View Demo</a>
     ·
-    <a href="https://github.com/damdamtouch/ironhack-project1/issues">Report Bug</a>
+    <a href="https://github.com/damdamtouch/tetris/issues">Report Bug</a>
     ·
-    <a href="https://github.com/damdamtouch/ironhack-project1/issues">Request Feature</a>
+    <a href="https://github.com/damdamtouch/tetris/issues">Request Feature</a>
   </p>
 </div>
 
@@ -69,8 +69,8 @@
 
 ## About The Project
 
-  <a href="https://damdamtouch.github.io/ironhack-project1/">
-    <img src="https://raw.githubusercontent.com/damdamtouch/ironhack-project1/main/media/thegame.png" alt="screen" width="400" height="400">
+  <a href="https://damdamtouch.github.io/tetris/">
+    <img src="https://raw.githubusercontent.com/damdamtouch/tetris/main/media/thegame.png" alt="screen" width="400" height="400">
   </a>
 
 Please enjoy playing to a little tetris. Very easy, no frills, just chill. May be still a bit buggy... Sorry about that !
